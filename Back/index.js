@@ -1,18 +1,23 @@
+require('dotenv').config();
+
 const express = require('express');
-const { livroModel } = require('./src/models/book'); 
-const connection = require('./src/config/database'); 
+const { livroModel } = require('./src/models/book');
+const connection = require('./src/config/database');
 const cors = require('cors');
 const app = express();
 
+const PORT = process.env.PORT || 3000;
 
-app.use(cors());
-app.use(express.json()); 
+// em produção, defina CORS_ORIGIN com a URL do front hospedado;
+// sem essa variável, libera qualquer origem (bom pra desenvolvimento local)
+app.use(cors({ origin: process.env.CORS_ORIGIN || '*' }));
+app.use(express.json());
 
 
 connection()
   .then(() => {
-    app.listen(3000, () => {
-      console.log('Servidor rodando na porta 3000');
+    app.listen(PORT, () => {
+      console.log(`Servidor rodando na porta ${PORT}`);
     });
   })
   .catch((error) => {

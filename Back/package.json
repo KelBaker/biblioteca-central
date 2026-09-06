@@ -2,16 +2,18 @@
   "name": "api",
   "version": "1.0.0",
   "main": "index.js",
- "scripts": {
-  "start": "node index.js",
-  "test": "echo \"Error: no test specified\" && exit 1"
-},
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["livros", "crud", "api-rest", "express", "mongodb"],
+  "author": "Kelvin Henrique",
+  "license": "MIT",
+  "description": "API REST para cadastro, edição e exclusão de livros, com Express e MongoDB.",
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^4.21.2"
+    "dotenv": "^17.4.2",
+    "express": "^4.21.2",
+    "mongoose": "^9.9.4"
   }
 }
