@@ -4,6 +4,7 @@ import './index.scss';
 import SubmenuLivros from '../../components/SubmenuLivros/SubmenuLivros';
 import { useParams } from 'react-router-dom';
 import { LivrosService } from '../../api/LivrosService';
+import { ToastContainer, toast } from 'react-toastify';
 
 const LivrosEdicao = () => {
   let { livroId } = useParams(); 
@@ -19,16 +20,13 @@ const LivrosEdicao = () => {
   
   async function getLivro() {
     if (!livroId) {
-      alert('ID do livro inválido!');
+      toast.error('ID do livro inválido!');
       return;
     }
 
     try {
-      console.log('Buscando livro com ID:', livroId); 
       const { data } = await LivrosService.getLivro(livroId);
 
-      console.log('Dados recebidos do backend:', data);
-      
       setLivro({
         ...data,
         id: livroId,
@@ -45,7 +43,12 @@ const LivrosEdicao = () => {
 
     
     if (isNaN(livro.numeroPaginas)) {
-      alert("O número de páginas deve ser um valor numérico.");
+      toast.error('O número de páginas deve ser um valor numérico.');
+      return;
+    }
+
+    if (!livro.titulo || !livro.numeroPaginas || !livro.isbn || !livro.editora) {
+      toast.error('Por favor, preencha todos os campos.');
       return;
     }
 
@@ -56,32 +59,21 @@ const LivrosEdicao = () => {
       editora: livro.editora,
     };
 
-    if (livro.titulo && livro.numeroPaginas && livro.isbn && livro.editora) {
-      try {
-        console.log('Enviando atualização do livro:', body);
-        const { data } = await LivrosService.updateLivro(livroId, body);
-
-        const mensagem = data?.mensagem || 'Livro atualizado com sucesso!';
-        alert(mensagem); 
-      } catch (error) {
-        handleError(error);
-      }
-    } else {
-      alert('Por favor, preencha todos os campos.');
+    try {
+      await LivrosService.updateLivro(livroId, body);
+      toast.success('Livro atualizado com sucesso!');
+    } catch (error) {
+      handleError(error);
     }
   }
 
-  
   const handleError = (error) => {
     if (error.response) {
-      console.error('Erro ao processar a requisição:', error.response);
-      alert(`Erro no servidor: ${error.response.status} - ${error.response.data}`);
+      toast.error(error.response.data?.message || `Erro no servidor (${error.response.status}).`);
     } else if (error.request) {
-      console.error('Erro ao processar a requisição (sem resposta):', error.request);
-      alert('Erro no servidor. Não houve resposta.');
+      toast.error('Erro no servidor. Não houve resposta.');
     } else {
-      console.error('Erro desconhecido:', error.message);
-      alert(`Erro desconhecido: ${error.message}`);
+      toast.error(`Erro desconhecido: ${error.message}`);
     }
   };
 
@@ -164,6 +156,7 @@ const LivrosEdicao = () => {
           </form>
         </div>
       </div>
+      <ToastContainer />
     </>
   );
 };

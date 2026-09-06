@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:3000"
+// em produção, defina VITE_API_URL no .env com a URL do backend hospedado
+// (ex.: Render); sem essa variável, usa o backend local para desenvolvimento
+const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000"
 
 export class LivrosService{
     static getLivros(){

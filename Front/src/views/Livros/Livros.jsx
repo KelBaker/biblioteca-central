@@ -31,10 +31,10 @@ const Livros = () => {
       setLoading(true);
       try {
         const { data } = await LivrosService.deleteLivro(livroId);
-        toast.success(data.mensagem);  
-        getLivros(); 
-      } catch ({ response: { data, status } }) {
-        toast.error(`${status} - ${data.mensagem}`);  
+        toast.success(data.message);
+        getLivros();
+      } catch (error) {
+        toast.error(error.response?.data?.message || 'Erro ao remover o livro.');
       } finally {
         setLoading(false);
         setDeleting(false);

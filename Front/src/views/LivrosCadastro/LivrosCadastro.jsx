@@ -3,49 +3,44 @@ import Header from '../../components/Header/Header';
 import './index.scss';
 import SubmenuLivros from '../../components/SubmenuLivros/SubmenuLivros';
 import { LivrosService } from '../../api/LivrosService';
+import { ToastContainer, toast } from 'react-toastify';
+
+const LIVRO_VAZIO = {
+  titulo: '',
+  numeroPaginas: '',
+  isbn: '',
+  editora: ''
+};
 
 const LivrosCadastro = () => {
-  const [livro, setLivro] = useState({
-    id: '', 
-    titulo: '',
-    numeroPaginas: '', 
-    isbn: '',
-    editora: ''
-  });
+  const [livro, setLivro] = useState(LIVRO_VAZIO);
 
-  
   async function createLivro(event) {
-    event.preventDefault(); 
+    event.preventDefault();
 
-    
     if (isNaN(livro.numeroPaginas)) {
-      alert("O número de páginas deve ser um valor numérico.");
+      toast.error('O número de páginas deve ser um valor numérico.');
       return;
     }
 
-    
+    if (!livro.titulo || !livro.numeroPaginas || !livro.isbn || !livro.editora) {
+      toast.error('Preencha todos os campos obrigatórios.');
+      return;
+    }
+
     const body = {
       titulo: livro.titulo,
-      numeroPaginas: livro.numeroPaginas, 
+      numeroPaginas: livro.numeroPaginas,
       isbn: livro.isbn,
       editora: livro.editora,
     };
 
-    console.log('Dados a serem enviados:', body); 
-
-    if (livro.titulo && livro.numeroPaginas && livro.isbn && livro.editora) {
-      try {
-        const response = await LivrosService.createLivro(body);
-        console.log('Resposta do servidor:', response); 
-        alert("Livro cadastrado com sucesso!"); 
-        document.getElementById('formulario').reset(); 
-      } catch (error) {
-        
-        console.error('Erro ao cadastrar livro:', error);
-        alert(`${error.response?.status} - ${error.response?.data}`);
-      }
-    } else {
-      alert('Preencha todos os campos obrigatórios.');
+    try {
+      await LivrosService.createLivro(body);
+      toast.success('Livro cadastrado com sucesso!');
+      setLivro(LIVRO_VAZIO);
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Erro ao cadastrar o livro.');
     }
   }
 
@@ -65,16 +60,7 @@ const LivrosCadastro = () => {
       <div className="livrosCadastro">
         <h1>Cadastro de Livros</h1>
         <div>
-          <form id="formulario" onSubmit={createLivro}>
-            <div className="form-group">
-              <label>Id</label>
-              <input
-                type="text"
-                name="id"
-                disabled 
-                value={livro.id} 
-              />
-            </div>
+          <form onSubmit={createLivro}>
             <div className="form-group">
               <label>Título</label>
               <input
@@ -125,6 +111,7 @@ const LivrosCadastro = () => {
           </form>
         </div>
       </div>
+      <ToastContainer />
     </>
   );
 };
