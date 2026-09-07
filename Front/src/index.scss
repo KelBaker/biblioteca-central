@@ -1,5 +1,38 @@
-*{
+:root {
+  --bg: #f7f5f1;
+  --surface: #ffffff;
+  --text: #221f2c;
+  --muted: #6b6579;
+  --border: #e6e1d8;
+  --primary: #4338ca;
+  --primary-dark: #312a99;
+  --accent: #b45309;
+  --danger: #dc2626;
+  --danger-dark: #b91c1c;
+  --success: #15803d;
+  --soft: #eeecfb;
+}
+
+* {
   box-sizing: border-box;
-  margin:0px;
-  padding:0px;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Inter", sans-serif;
+}
+
+a {
+  color: inherit;
+}
+
+h1, h2, h3 {
+  font-family: "Fraunces", serif;
 }

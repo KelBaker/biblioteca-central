@@ -9,11 +9,13 @@ const LIVRO_VAZIO = {
   titulo: '',
   numeroPaginas: '',
   isbn: '',
-  editora: ''
+  editora: '',
+  status: 'quero-ler'
 };
 
 const LivrosCadastro = () => {
   const [livro, setLivro] = useState(LIVRO_VAZIO);
+  const [salvando, setSalvando] = useState(false);
 
   async function createLivro(event) {
     event.preventDefault();
@@ -33,14 +35,18 @@ const LivrosCadastro = () => {
       numeroPaginas: livro.numeroPaginas,
       isbn: livro.isbn,
       editora: livro.editora,
+      status: livro.status,
     };
 
+    setSalvando(true);
     try {
       await LivrosService.createLivro(body);
       toast.success('Livro cadastrado com sucesso!');
       setLivro(LIVRO_VAZIO);
     } catch (error) {
       toast.error(error.response?.data?.message || 'Erro ao cadastrar o livro.');
+    } finally {
+      setSalvando(false);
     }
   }
 
@@ -59,7 +65,7 @@ const LivrosCadastro = () => {
       <SubmenuLivros />
       <div className="livrosCadastro">
         <h1>Cadastro de Livros</h1>
-        <div>
+        <div className="form-card">
           <form onSubmit={createLivro}>
             <div className="form-group">
               <label>Título</label>
@@ -106,7 +112,17 @@ const LivrosCadastro = () => {
               />
             </div>
             <div className="form-group">
-              <button type="submit">Cadastrar Livro</button>
+              <label>Status de leitura</label>
+              <select name="status" value={livro.status} onChange={handleChange}>
+                <option value="quero-ler">Quero ler</option>
+                <option value="lendo">Lendo</option>
+                <option value="lido">Lido</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <button type="submit" disabled={salvando}>
+                {salvando ? 'Salvando...' : 'Cadastrar Livro'}
+              </button>
             </div>
           </form>
         </div>

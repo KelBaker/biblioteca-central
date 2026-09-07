@@ -12,10 +12,12 @@ const LivrosEdicao = () => {
   const [livro, setLivro] = useState({
     id: '',
     titulo: '',
-    numeroPaginas: '', 
+    numeroPaginas: '',
     isbn: '',
     editora: '',
+    status: 'quero-ler',
   });
+  const [salvando, setSalvando] = useState(false);
 
   
   async function getLivro() {
@@ -57,13 +59,17 @@ const LivrosEdicao = () => {
       numeroPaginas: Number(livro.numeroPaginas),
       isbn: livro.isbn,
       editora: livro.editora,
+      status: livro.status,
     };
 
+    setSalvando(true);
     try {
       await LivrosService.updateLivro(livroId, body);
       toast.success('Livro atualizado com sucesso!');
     } catch (error) {
       handleError(error);
+    } finally {
+      setSalvando(false);
     }
   }
 
@@ -98,9 +104,9 @@ const LivrosEdicao = () => {
       <SubmenuLivros />
       <div className="livrosCadastro">
         <h1>Edição de Livros</h1>
-        <div>
+        <div className="form-card">
           <form onSubmit={editLivro}>
-            <div className="form-group">
+            <div className="form-group id-group">
               <label>Id</label>
               <input
                 type="text"
@@ -151,7 +157,17 @@ const LivrosEdicao = () => {
               />
             </div>
             <div className="form-group">
-              <button type="submit">Atualizar Livro</button>
+              <label>Status de leitura</label>
+              <select name="status" value={livro.status || 'quero-ler'} onChange={handleChange}>
+                <option value="quero-ler">Quero ler</option>
+                <option value="lendo">Lendo</option>
+                <option value="lido">Lido</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <button type="submit" disabled={salvando}>
+                {salvando ? 'Salvando...' : 'Atualizar Livro'}
+              </button>
             </div>
           </form>
         </div>
