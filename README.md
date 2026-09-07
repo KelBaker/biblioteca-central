@@ -1,139 +1,75 @@
-# Sistema de Cadastro e Edição de Livros
+# 📚 Biblioteca Central Online
 
-Este projeto é um sistema de cadastro e edição de livros. Ele permite que um usuário registre informações sobre livros, como título, número de páginas, ISBN e editora, tanto para adicionar novos livros quanto para editar ou excluir livros existentes.
+Sistema full-stack para gerenciar uma biblioteca pessoal: cadastre, edite e acompanhe o status de leitura dos seus livros, com capa buscada automaticamente a partir do ISBN.
 
-## Tecnologias Utilizadas
+`react` `vite` `nodejs` `express` `mongodb` `mongoose` `axios` `react-router` `open-library-api`
 
-- **React**: Biblioteca JavaScript para a construção da interface de usuário.
-- **Axios**: Para realizar requisições HTTP à API.
-- **SCSS**: Para estilização do projeto.
-- **useState e useEffect**: Para gerenciamento de estado e efeitos colaterais no React.
-- **MongoDB**: Banco de dados NoSQL.
+## 🔗 Backend em produção
 
-## Funcionalidades
+https://biblioteca-livros-api.onrender.com
 
-### Cadastro de Livro
-O formulário de cadastro de livro permite que o usuário insira os seguintes dados:
-- **Título**: O título do livro.
-- **Número de Páginas**: O número total de páginas do livro.
-- **ISBN**: O código de barras único do livro.
-- **Editora**: A editora do livro.
+## ✨ Funcionalidades
 
-**Fluxo**:  
-O usuário preenche os campos e clica em "Cadastrar Livro". O sistema verifica se todos os campos foram preenchidos corretamente. Se algum campo estiver vazio ou inválido, o sistema exibe um alerta. O livro é então enviado para o backend via API, onde será armazenado.
+- Cadastro, edição e exclusão de livros (título, número de páginas, ISBN, editora)
+- **Capa do livro buscada automaticamente** a partir do ISBN, via [Open Library Covers API](https://openlibrary.org/dev/docs/api/covers) — com ícone de fallback quando a capa não existe
+- **Status de leitura** por livro: Quero ler, Lendo ou Lido
+- Notificações visuais (toast) de sucesso/erro, sem `alert()` nativo
+- Estado de carregamento nos botões durante as requisições
+- API REST completa (GET, POST, PUT, DELETE) com tratamento de erro
 
-### Edição de Livro
-O formulário de edição permite que o usuário altere as informações de um livro já cadastrado. Os campos editáveis são os mesmos do cadastro, mas o usuário pode modificar os dados existentes.
+## 🛠️ Tecnologias
 
-### Exclusão de Livro
-O usuário tem a possibilidade, na tela de "Listar livros", de excluir determinado livro.
+**Front-end**
+- React + Vite
+- React Router
+- Axios
+- React Toastify
+- SCSS
 
----
+**Back-end**
+- Node.js + Express
+- MongoDB + Mongoose
+- dotenv, cors
 
-## Métodos
+## 🔌 Infraestrutura
 
-### POST /livros
-**Descrição**: Cadastra um novo livro.  
-**Request Body**:
-- `titulo`: Título do Livro
-- `numeroPaginas`: 100
-- `isbn`: 978-3-16-148410-0
-- `editora`: Editora XYZ
+| Peça | Onde está hospedado |
+|---|---|
+| Banco de dados | MongoDB Atlas (tier gratuito) |
+| Backend (API REST) | Render (tier gratuito) |
+| Frontend | Netlify |
 
-**Resposta**:
-- `id`: 1
-- `titulo`: Título do Livro
-- `numeroPaginas`: 100
-- `isbn`: 978-3-16-148410-0
-- `editora`: Editora XYZ
+## 🚀 Como rodar localmente
 
----
+### Backend
 
-### GET /livros/{id}
-**Descrição**: Retorna as informações de um livro específico.  
-**Parâmetros**:
-- `id (obrigatório)`: ID do livro.
-
-**Resposta**:
-- `id`: 1
-- `titulo`: Título do Livro
-- `numeroPaginas`: 100
-- `isbn`: 978-3-16-148410-0
-- `editora`: Editora XYZ
-
----
-
-### GET /livros
-**Descrição**: Lista todos os livros do banco de dados.
-
-**Resposta**:
-- `id`: 1
-- `titulo`: Título do Livro
-- `numeroPaginas`: 100
-- `isbn`: 978-3-16-148410-0
-- `editora`: Editora XYZ
-- `id`: 2
-- `titulo`: Outro Livro
-- `numeroPaginas`: 200
-- `isbn`: 978-1-23-456789-0
-- `editora`: Editora ABC
-
----
-
-### PUT /livros/{id}
-**Descrição**: Atualiza as informações de um livro existente.  
-**Request Body**:
-- `titulo`: Novo Título do Livro
-- `numeroPaginas`: 120
-- `isbn`: 978-3-16-148410-1
-- `editora`: Nova Editora
-
-**Resposta**:
-- `id`: 1
-- `titulo`: Novo Título do Livro
-- `numeroPaginas`: 120
-- `isbn`: 978-3-16-148410-1
-- `editora`: Nova Editora
-
----
-
-### DELETE /livros/{id}
-**Descrição**: Exclui um livro específico com base no ID fornecido.  
-**URL**: http://localhost:3000/livros/{id} (substitua `{id}` pelo ID de um livro existente).
-
----
-
-## Scripts para rodar Back e Front
-
-#### Back
-Para rodar o backend, utilize o seguinte comando:
-
-`npm start`
-
-Com o seguinte script no `package.json`:
-
-```json
-{
-  "scripts": {
-    "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  }
-}
+```bash
+git clone https://github.com/KelBaker/RID157304_Desafio05.git
+cd RID157304_Desafio05/Back
+npm install
+cp .env.example .env
 ```
 
-#### Front
-Para rodar o frontend, utilize o seguinte comando:
+Edite o `.env` com sua própria connection string do MongoDB (local ou Atlas), depois:
 
-`npm run dev`
+```bash
+npm start
+```
 
-Com o seguinte script no `package.json`:
+### Frontend
 
-```json
-{
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
-  }
-}
+```bash
+cd ../Front
+npm install
+cp .env.example .env
+```
+
+Edite o `.env` com a URL do backend (local ou o deployado), depois:
+
+```bash
+npm run dev
+```
+
+## 📄 Licença
+
+Este projeto está sob a licença MIT — veja o arquivo [LICENSE](LICENSE) para mais detalhes.
