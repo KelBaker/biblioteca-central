@@ -53,19 +53,20 @@ app.get('/livros/:id', async (req, res) => {
 
 app.post('/livros', async (req, res) => {
   try {
-    const { titulo, numeroPaginas, isbn, editora } = req.body;
+    const { titulo, numeroPaginas, isbn, editora, status } = req.body;
 
-    
+
     if (!titulo || !numeroPaginas || !isbn || !editora) {
       return res.status(400).json({ message: 'Todos os campos são obrigatórios' });
     }
 
-    
+
     const novoLivro = new livroModel({
       titulo,
       numeroPaginas,
       isbn,
-      editora
+      editora,
+      status
     });
 
     await novoLivro.save();

@@ -5,7 +5,12 @@ const livroSchema = new mongoose.Schema({
   titulo: { type: String, required: true },
   numeroPaginas: { type: Number, required: true },
   isbn: { type: String, required: true },
-  editora: { type: String, required: true }
+  editora: { type: String, required: true },
+  status: {
+    type: String,
+    enum: ['quero-ler', 'lendo', 'lido'],
+    default: 'quero-ler'
+  }
 });
 
 
